@@ -39,15 +39,15 @@ namespace granthalaya.Services
             {
                 if (parameter == "title" || parameter == "")
                 {
-                    return _books.Find(book => book.title.ToString().Contains(query) && book.libraryId == libraryId).ToList();
+                    return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower()) && book.libraryId == libraryId).ToList();
                 }
                 else if (parameter == "auther")
                 {
-                    return _books.Find(book => book.author.ToString().Contains(query) && book.libraryId == libraryId).ToList();
+                    return _books.Find(book => book.author.ToString().ToLower().Contains(query.ToLower()) && book.libraryId == libraryId).ToList();
                 }
                 else if (parameter == "library")
                 {
-                    return _books.Find(book => book.title.ToString().Contains(query) && book.libraryId == libraryId).ToList();
+                    return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower()) && book.libraryId == libraryId).ToList();
 
                 }
             }
@@ -55,15 +55,15 @@ namespace granthalaya.Services
             {
                 if (parameter == "title" || parameter == "")
                 {
-                    return _books.Find(book => book.title.ToString().Contains(query)).ToList();
+                    return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower())).ToList();
                 }
                 else if (parameter == "auther")
                 {
-                    return _books.Find(book => book.author.ToString().Contains(query)).ToList();
+                    return _books.Find(book => book.author.ToString().ToLower().Contains(query.ToLower())).ToList();
                 }
                 else if (parameter == "library")
                 {
-                    return _books.Find(book => book.title.ToString().Contains(query)).ToList();
+                    return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower())).ToList();
 
                 }
             }
