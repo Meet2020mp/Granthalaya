@@ -11475,11 +11475,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\Granthalaya\\backend\\granthalaya\\granthalaya\\granthalaya.csproj",
+      "projectUniqueName": "G:\\Granthalaya\\backend\\granthalaya\\Granthalaya-backend\\granthalaya\\granthalaya.csproj",
       "projectName": "granthalaya",
-      "projectPath": "G:\\Granthalaya\\backend\\granthalaya\\granthalaya\\granthalaya.csproj",
+      "projectPath": "G:\\Granthalaya\\backend\\granthalaya\\Granthalaya-backend\\granthalaya\\granthalaya.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "G:\\Granthalaya\\backend\\granthalaya\\granthalaya\\obj\\",
+      "outputPath": "G:\\Granthalaya\\backend\\granthalaya\\Granthalaya-backend\\granthalaya\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",

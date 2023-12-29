@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cU5BOqvlmXiK6N/gBb3jpj5/85z6TLM/+0Rk8jvCM3+I50XeHf0AtWs/4KrK7yPbuatELaGCw8XeCNBBNr7rMA==",
+  "dgSpecHash": "d/dD8KoAA8fkm3cmRAmm7M4mIlnKtLP2RPgbpraz1gr3t+Zk+yG95U+tn5SRknX3y3yOy5siaZQDHC706doRZQ==",
   "success": true,
-  "projectFilePath": "G:\\Granthalaya\\backend\\granthalaya\\granthalaya\\granthalaya.csproj",
+  "projectFilePath": "G:\\Granthalaya\\backend\\granthalaya\\Granthalaya-backend\\granthalaya\\granthalaya.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
