@@ -41,7 +41,12 @@ export default function AddLibrarian() {
   ]);
   const fetchLibraries = () => {
     try {
-      axios.get('https://localhost:7271/api/Libraries').then((response) => {
+      axios.get('https://localhost:7271/api/Libraries',{
+        headers:{
+          "authorization": "Bearer " + localStorage.getItem('token')
+
+        }
+      }).then((response) => {
         setLibraries(response.data);
         setLoading(false);
         console.log(libraries);
@@ -67,7 +72,9 @@ export default function AddLibrarian() {
         'libraryId':libraryRef.current.value
       },{
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          "authorization": "Bearer " + localStorage.getItem('token')
+
         }}).then(response=>{
           setIsAdded(true);
             console.log(response.data);
@@ -83,7 +90,7 @@ export default function AddLibrarian() {
 
     <div className='login-page'>
       <Paper elevation={5} className="container w-50 my-3 py-3">
-        <h2 className="text-center">Add New Librarian: </h2>
+        <h2 className="text-center" style={{fontFamily:"fantasy"}}>Add New Librarian: </h2>
         <Row className="justify-content-md-center mt-5">
           <Col md={6}>
             <Form onSubmit={handleSubmit} id="signUpForm" className='form-container'>

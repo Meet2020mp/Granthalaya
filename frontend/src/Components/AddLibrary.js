@@ -19,7 +19,8 @@ function AddLibraryForm() {
 
     axios.post(`https://localhost:7271/api/Libraries`,library,{
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        "authorization": "Bearer " + localStorage.getItem('token')
       }
     }).then(response=>{
       setIsAdded(true);
@@ -39,7 +40,7 @@ function AddLibraryForm() {
     <Container variant="dark">
     <div className="container my-4">
       <Paper elevation={5}>
-      <h2 className="text-center py-2">Add New library:</h2>
+      <h2 className="text-center py-2" style={{fontFamily:"fantasy"}}>Add New library:</h2>
     <Form variant="darak" className="p-3"onSubmit={handleSubmit}>
       <Form.Group controlId="formTitle">
         <Form.Label>Library name</Form.Label>

@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 namespace granthalaya.Services
 {
-    public class BorrowedBoookService:IBorrowedBookService
+    public class BorrowedBoookService:IBorrowedBookService 
     {
         private readonly IMongoCollection<BorrowedBook> _borrowedBooks;
         private readonly IMongoCollection<Book> _books;
@@ -38,14 +38,14 @@ namespace granthalaya.Services
             return _borrowedBooks.Find(book => true).ToList();
         }
 
-        public List<BorrowedBook> GetBorrowedBooksByCustomerId(string customerId)
+        public List<BorrowedBook> GetBorrowedBooksByCustomerName(string customerName)
         {
-            return _borrowedBooks.Find(book => book.customerId == customerId).ToList();
+            return _borrowedBooks.Find(book => book.customerName == customerName).ToList();
         }
 
-        public List<BorrowedBook> GetBorrowedBooksBylibraryId(string libraryId)
+        public List<BorrowedBook> GetBorrowedBooksBylibraryName(string libraryName)
         {
-            return _borrowedBooks.Find(book => book.libraryId == libraryId).ToList();
+            return _borrowedBooks.Find(book => book.libraryName == libraryName).ToList();
         }
 
         public void UpdateBorrowedBook(string id, BorrowedBook borrowedBook)

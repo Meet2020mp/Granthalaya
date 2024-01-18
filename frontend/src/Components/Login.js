@@ -21,7 +21,11 @@ export default function Login() {
     const password = passwordRef.current.value;
     if(librarianRef.current.checked){
       try{
-        axios.get(`https://localhost:7271/api/Librarians/${userName}`).then((response) => {
+        axios.post(`https://localhost:7271/api/Librarians/Login`,{
+          'name':userName,
+          'password':password
+        }).then((response) => {
+          console.log(response);
           // if(response.data.name===userName && response.data.password===password && userName === 'admin'){
             //   setIsLoggedIn(true);
         //   setIsAdmin(true);
@@ -32,29 +36,29 @@ export default function Login() {
         //   navigate("/admin");
 
         // }
-        if(userName=="admin" && response.data.name===userName && response.data.password===password){
+        if(userName=="admin" && response.status==200){
           setIsLoggedIn(true);
           setIsAdmin(true);
           setUserId(response.data.id);
           setUserName(response.data.name);
-          localStorage.setItem('userName',response.data.name);
-          localStorage.setItem('userId',response.data.id);
+          localStorage.setItem('userName',userName);
+          // localStorage.setItem('userId',response.data.name);
           localStorage.setItem('isAdmin',true);
+          localStorage.setItem('token',response.data);
           // navigate("/");
           const lastLocation=localStorage.getItem('redirectTo');
           localStorage.removeItem('redirectTo');
           // Feedback({mes:`Welcome ${userName}`,open:'true',type:"success"})
-          lastLocation?navigate(lastLocation):navigate('/');
+          lastLocation?navigate(lastLocation):navigate('/admin');
         }
-        else if(response && response.data.name===userName && response.data.password===password){
+        else if(response.status==200){
           setIsLoggedIn(true);
           setIsLibrarian(true);
           setUserId(response.data.id);
           setUserName(response.data.name);
-
-          localStorage.setItem('userName',response.data.name);
-          localStorage.setItem('userId',response.data.id);
-          localStorage.setItem('libraryId',response.data.libraryId);
+          localStorage.setItem('userName',userName);
+          localStorage.setItem('token',response.data.split("$#:")[0]);
+          localStorage.setItem('libraryName',response.data.split("$#:")[1]);
           // Feedback({mes:`Welcome ${userName}`,open:'true',type:"success"})
 
       //     const location = useLocation();
@@ -76,16 +80,19 @@ export default function Login() {
       }
     }else{
       try{
-        axios.get(`https://localhost:7271/api/Customers/${userName}`).then((response) => {
-          
-          if(response && response.data.name===userName && response.data.password===password){
-            setIsLoggedIn(true);
-            setIsLibrarian(false);
-            setUserId(response.data.id);
-            setUserName(response.data.name);
-            localStorage.setItem('userName',response.data.name);
-            localStorage.setItem('userId',response.data.id);
-            // navigate("/");
+        axios.post(`https://localhost:7271/api/Customers/Login`,{
+          'name':userName,
+          'password':password
+        }).then((response) => {
+          console.log(response.data);
+          if(response.status==200){
+            // setIsLoggedIn(true);
+            // setIsLibrarian(false);
+            // setUserId(response.data.id);
+            // setUserName(response.data.name);
+            localStorage.setItem('userName',userName);
+            localStorage.setItem('token',response.data);
+             // navigate("/");
             const lastLocation=localStorage.getItem('redirectTo');
             localStorage.removeItem('redirectTo');
             // Feedback({mes:`Welcome ${userName}`,open:'true',type:"success"})

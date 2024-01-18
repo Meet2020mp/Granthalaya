@@ -1,10 +1,12 @@
 ﻿using granthalaya.Services;
 using Microsoft.AspNetCore.Mvc;
 using granthalaya.Models;
+using Microsoft.AspNetCore.Authorization;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace granthalaya.Controllers
 {
+    [Authorize(Roles ="Admin")]
     [Route("api/Libraries")]
     [ApiController]
     public class LibraryController : ControllerBase
@@ -15,6 +17,7 @@ namespace granthalaya.Controllers
             this._libraryService = libraryService;
         }
         // GET: api/<LibraryController>
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<List<Library>> Get()
         {
@@ -22,17 +25,28 @@ namespace granthalaya.Controllers
         }
 
         // GET api/<LibraryController>/5
-        [HttpGet("{id}")]
-        public ActionResult<Library> Get(string id)
+        [HttpGet("{name}")]
+        public ActionResult<Library> Get(string name)
         {
-            var library= _libraryService.GetLibraryById(id);
+            var library= _libraryService.GetLibraryByName(name);
             if (library == null)
             {
-                return NotFound($"Library with Id {id} not found!!");
+                return NotFound($"Library  not found!!");
             }
             return library;
         }
-
+        [AllowAnonymous]
+        [HttpGet("byId/{id}")]
+        public ActionResult<Library> GetByName(string id)
+        {
+            var library = _libraryService.GetLibraryById(id);
+            if (library == null)
+            {
+                return NotFound($"Library  not found!!");
+            }
+            return library;
+        }
+        
         // POST api/<LibraryController>
         [HttpPost]
         public ActionResult<Library> Post([FromBody] Library library)

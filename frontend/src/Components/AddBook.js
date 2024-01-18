@@ -16,18 +16,22 @@ function AddBookForm() {
   const publishDateRef=new useRef(null);
   const priceRef=new useRef(null);
   const imageRef=new useRef(null);
-  const {libraryId}=useParams();
-  const [libraryName,setLibraryName]=useState();
+  const descriptionRef=new useRef(null);
+  const libraryName=localStorage.getItem('libraryName');
   const [isAdded,setIsAdded]=useState(false);
   const [publishDate,setPublishDate]=useState();
+  const [description,setDescription]=useState();
   const [value, setValue] = React.useState(dayjs('2022-04-17T15:30'));
   const [src,setSrc]=useState("/b2.jpg");
   const [imgname,setImgName]=useState("/b1.jpg");
   const [img,setImg]=useState();
   const fetchData=()=>{
-    axios.get(`https://localhost:7271/api/Libraries/${libraryId}`).then(response=>{
+    axios.get(`https://localhost:7271/api/Libraries/${libraryName}`,{
+      headers:{
+        "authorization": "Bearer " + localStorage.getItem('token')
+      }
+    }).then(response=>{
       console.log(response.data);
-      setLibraryName(response.data.name);
     }).catch(err=>{console.log(err)})
   }
   const handleSubmit = event => {
@@ -47,14 +51,16 @@ function AddBookForm() {
     formData.append('quantity',quantityRef.current.value)
     formData.append('author',authorRef.current.value)
     formData.append('publishDate',publishDateRef.current.value)
+    formData.append('description',descriptionRef.current.value)
     formData.append('price',priceRef.current.value)
-    formData.append('libraryId',libraryId)
+    formData.append('libraryName',libraryName)
     formData.append('image',img)
     formData.append('imageName',imgname)
     // console.log(formData);
     axios.post('https://localhost:7271/api/Books/',formData,{
-      Headers:{
-        "Content-Type":"application/json"
+      headers:{
+        "Content-Type":"application/json",
+        "authorization": "Bearer " + localStorage.getItem('token')
       }
     }).then(response => {
       // console.log(response.data);
@@ -92,7 +98,7 @@ function AddBookForm() {
       
     <div className="container my-4">
       <Paper elevation={5}>
-      <h2 className="text-center py-2">Add New Book to {libraryName}:</h2>
+      <h2 className="text-center py-2" style={{fontFamily:"fantasy"}}>Add New Book to {libraryName}:</h2>
     <Form variant="darak" className="p-3"onSubmit={handleSubmit}>
       <Form.Group controlId="formTitle">
         <Form.Label>Title</Form.Label>
@@ -111,6 +117,10 @@ function AddBookForm() {
           ref={authorRef}
           placeholder="Enter book author"
         />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label>Book description</Form.Label>
+        <Form.Control as="textarea" rows={3} ref={descriptionRef} placeholder="Enter book description"/>
       </Form.Group>
       <Form.Group className="my-2" controlId="formPrice">
         <Form.Label>Price</Form.Label>

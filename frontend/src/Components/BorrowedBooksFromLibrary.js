@@ -21,7 +21,7 @@ const columns = [
 
     { id: 'bookName', label: 'Book Name', minWidth: 150 },
 
-    { id: 'customerId', label: 'Customer Id', minWidth: 100 },
+    { id: 'customerName', label: 'Customer Name', minWidth: 100 },
     {
         id: 'dueDate',
         label: 'Due Date',
@@ -81,7 +81,9 @@ export default function BorrowedBooksFromLibrary() {
     ]);
     const [returnedBooks, setReturnedBooks] = useState();
     let fetchBooks = async () => {
-        await axios.get(`https://localhost:7271/api/BorrowedBooks/ByLibraryId/${localStorage.getItem('libraryId')}`).then((response) => {
+        await axios.get(`https://localhost:7271/api/BorrowedBooks/ByLibraryName/${localStorage.getItem('libraryName')}`,{
+            headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+          }).then((response) => {
             console.log(response.data);
             setBooks( response.data);
             setLoading(false);
@@ -97,7 +99,7 @@ export default function BorrowedBooksFromLibrary() {
         },
     })
     useEffect(() => {
-        if (!localStorage.getItem('libraryId')) {
+        if (!localStorage.getItem('libraryName')) {
             localStorage.setItem('redirectTo', `/admin/borrowed-books`);
             navigate('/login');
         }
@@ -108,7 +110,9 @@ export default function BorrowedBooksFromLibrary() {
     }, [isReturned])
     const returnBook = async (bid) => {
         // setLoading(true);
-        await axios.get(`https://localhost:7271/api/BorrowedBooks/${bid}`).then(response => {
+        await axios.get(`https://localhost:7271/api/BorrowedBooks/${bid}`,{
+            headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+          }).then(response => {
             // console.log(response.data);
             setReturnedBooks(response.data);
         }).catch(err => {
@@ -127,8 +131,8 @@ export default function BorrowedBooksFromLibrary() {
         await axios.put(`https://localhost:7271/api/BorrowedBooks/${bid}`,
             {
                 'id': bid,
-                'libraryId': returnedBooks.libraryId,
-                'customerId': returnedBooks.customerId,
+                'libraryName': returnedBooks.libraryName,
+                'customerName': returnedBooks.customerName,
                 'issueDate': returnedBooks.issueDate,
                 'dueDate': returnedBooks.dueDate,
                 'bookId': returnedBooks.bookId,
@@ -138,7 +142,10 @@ export default function BorrowedBooksFromLibrary() {
                 'fine': fineDays * 10
                 // 'fine':0
             }, {
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+                'Content-Type': 'application/json',
+                "authorization": "Bearer " + localStorage.getItem('token')
+        }
         }).then(response => {
             console.log(response.data);
             setIsReturned(true);
@@ -149,29 +156,12 @@ export default function BorrowedBooksFromLibrary() {
         })
         // console.log(bid);
     }
-    async function getValue(bid,lid) {
-        axios.get(`https://localhost:7271/api/Books/${bid}`).then(response => {
-            //   console.log(response.data);  
-            setBookName(response.data.title);
-            setBookSrc(response.data.imageName);
-            // setLoading(false);
-        }).catch(err => {
-            console.log(err);
-        })
-
-        axios.get(`https://localhost:7271/api/Libraries/${lid}`).then(response => {
-            // console.log(response.data);  
-            setlibraryId(response.data.name);
-        }).catch(err => {
-            console.log(err);
-        })
-    }
 
     // var bid=0;
     return (
         <>
             <div className="container text-center">
-                <h1>Borrowed books are:</h1>
+                <h2 style={{fontFamily:"fantasy"}}>Borrowed books of {localStorage.getItem('libraryName')} are:</h2>
 
                 {isReturned && <Feedback mes="book returned!!" open={true} type="success" />}
 

@@ -1,5 +1,6 @@
 ﻿using granthalaya.Models;
 using granthalaya.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,12 +20,13 @@ namespace granthalaya.Controllers
             this._hostingEnvironment = hostEnvironment;
         }
         // GET: api/<BookController>
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<List<Book>> Get()
         {
             return _bookService.GetBooks();
         }
-
+        [AllowAnonymous]
         // GET api/<BookController>/5
         [HttpGet("{id}")]
         public ActionResult<Book> Get(string id)
@@ -36,26 +38,30 @@ namespace granthalaya.Controllers
             }
             return book;
         }
-        [HttpGet("ByQuery/{parameter}/{query}/{libraryId}")]
-        public ActionResult<List<Book>> GetBooksByQuery(string parameter,string query, string libraryId)
+        [AllowAnonymous]
+        [HttpGet("ByQuery/{parameter}/{query}/{libraryName}")]
+        public ActionResult<List<Book>> GetBooksByQuery(string parameter,string query, string? libraryName)
         {
-                var books = _bookService.GetBookByQuery(parameter,query, libraryId);
+                var books = _bookService.GetBookByQuery(parameter,query, libraryName);
                 if (books == null)
                 {
                     return NotFound("Sorry no book found!!");
                 }
             return books;
         }
-        [HttpGet("ByLibraryId/{libraryId}")]
-        public ActionResult<List<Book>> GetBooksOfLibrary(string libraryId)
+        [AllowAnonymous]
+        [HttpGet("ByLibraryName/{libraryName}")]
+        public ActionResult<List<Book>> GetBooksOfLibrary(string libraryName)
         {
-            var books=_bookService.GetBookByLibraryId(libraryId);
+            var books=_bookService.GetBookBylibraryName(libraryName);
             if (books == null)
             {
                 return NotFound("No books found for library!!");
             }
             return books;
         }
+        [Authorize(Roles = "Librarian")]
+
         // POST api/<BookController>
         [HttpPost]
         public async Task<ActionResult<Book>> Post([FromForm] Book book)
@@ -65,6 +71,7 @@ namespace granthalaya.Controllers
             _bookService.CreateBook(book);
             return CreatedAtAction(nameof(Get), new { id = book.Id }, book);
         }
+        [Authorize(Roles = "Librarian")]
 
         // PUT api/<BookController>/5
         [HttpPut("{id}")]
@@ -94,6 +101,7 @@ namespace granthalaya.Controllers
             }
             return NoContent();
         }
+        [Authorize(Roles = "Librarian")]
 
         // DELETE api/<BookController>/5
         [HttpDelete("{id}")]

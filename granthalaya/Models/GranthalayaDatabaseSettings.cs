@@ -10,5 +10,7 @@ namespace granthalaya.Models
         public string LibraryCollectionName { get; set; } = string.Empty;
         public string BookCollectionName { get; set; } = string.Empty;
         public string BorrowedBookCollectionName { get; set; } = string.Empty;
+        public string ReviewCollectionName { get; set; }
+        public string Token { get; set; } = string.Empty;
     }
 }

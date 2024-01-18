@@ -3,6 +3,9 @@ using granthalaya.Services;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -31,11 +34,32 @@ builder.Services.AddScoped<ILibrarianService, LibrarianService>();
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IBorrowedBookService, BorrowedBoookService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 builder.Services.AddControllers();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts =>
+{
+    opts.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration.GetSection("GranthalayaDatabaseSettings:Token").Value!)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "standard authorization using bearer scheme",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+    });
+    c.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 var app = builder.Build();
 
@@ -52,7 +76,8 @@ app.UseStaticFiles(new StaticFileOptions
 });
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization(); 
 app.UseCors(MyAllowSpecificOrigins);
 
 app.MapControllers();

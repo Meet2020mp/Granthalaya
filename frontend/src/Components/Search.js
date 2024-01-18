@@ -30,9 +30,9 @@ export default function Search() {
   const [loading,setLoading]=useState(true);
   const [books,setBooks]=useState([]);
   const [isDelete, setIsDelete] = React.useState(false);
-  const { libraryId } = useParams();
+  const { libraryName } = useParams();
   const navigate = useNavigate();
-  const isLibrarian=localStorage.getItem('libraryId');
+  const isLibrarian=localStorage.getItem('libraryName');
   const columns = [
     { id: 'id', label: 'Book id', minWidth: 80 },
 
@@ -46,10 +46,10 @@ export default function Search() {
         format: (value) => value.toLocaleString('en-US'),
     },
     {
-      id: 'libraryId',
-      label: 'Library Id',
-      minWidth: 50,
-      align: 'right',
+      id: 'libraryName',
+      label: 'Library',
+      minWidth: 120,
+      align: 'center',
       format: (value) => value.toLocaleString('en-US'),
   },
     {
@@ -100,7 +100,9 @@ const getMuiTheme = () => createTheme({
 })
 const storeData=async (bid)=>{
   var bookBorrow;
-   await axios.get(`https://localhost:7271/api/Books/${bid}`).then(response=>{
+   await axios.get(`https://localhost:7271/api/Books/${bid}`,{
+    headers: { "authorization": "Bearer " + localStorage.getItem('token') },
+  }).then(response=>{
           // setBookBorrow(response.data);
           bookBorrow=response.data;
       }).catch(e=>console.log(e))
@@ -116,14 +118,15 @@ const storeData=async (bid)=>{
           'dueDate': dueDate,
           'returnDate': null,
           'fine': 0,
-          'customerId': localStorage.getItem('userId'),
+          'customerName': localStorage.getItem('userName'),
           'bookName':bookBorrow.title,
           'bookImage':bookBorrow.imageName,
-          'libraryName':bookBorrow.libraryId
+          'libraryName':bookBorrow.libraryName
       }
       axios.post('https://localhost:7271/api/BorrowedBooks', borrowedBook, {
           headers: {
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              "authorization": "Bearer " + localStorage.getItem('token')
           }
       }).then(response => {
           console.log(response.data);
@@ -136,7 +139,9 @@ const storeData=async (bid)=>{
   const handleSubmit=async ()=>{
     setLoading(true);
     
-    await axios.get(`https://localhost:7271/api/Books/byQuery/${parameter}/${query}/${libraryId}`).then((res)=>{
+    await axios.get(`https://localhost:7271/api/Books/byQuery/${parameter}/${query}/${libraryName}`,{
+        headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+      }).then((res)=>{
       console.log(res.data);
       setBooks(res.data);
       setLoading(false);
@@ -152,6 +157,7 @@ const storeData=async (bid)=>{
     }
     else {
         let borrowedBook;
+        navigate(`/book/${bid}`)
         storeData(bid)
     }
     // console.log(bid);
@@ -160,31 +166,7 @@ const storeData=async (bid)=>{
     setLoading(false);
     handleSubmit();
   },[isBorrowed,query,isDelete])
-  const editBook = (popupState,bid) => {
-    // popupState.close;
-    if (!localStorage.getItem('userName') || !localStorage.getItem('libraryId')) {
-        localStorage.setItem('redirectTo', `/admin/edit-book/${bid}`);
-        navigate('/login');
-    }
-    else {
-        navigate(`/admin/edit-book/${bid}`);
-    }
-}
-const deleteBook = (popupState,bid) => {
-    // popupState.close;
-    if (!localStorage.getItem('userName') || !localStorage.getItem('libraryId')) {
-        localStorage.setItem('redirectTo', `/admin/edit-book/${bid}`);
-        navigate('/login');
-    }
-    else {
-        axios.delete(`https://localhost:7271/api/Books/${bid}`).then(res=>{
-            console.log(res.data);
-            setIsDelete(true);
-        }).catch(e=>{
-            console.log(e);
-        })
-    }
-  }
+
   return (
     <>
      {isBorrowed && <Feedback mes="Book borrowed!!" open={true} type="success" />}
@@ -192,7 +174,7 @@ const deleteBook = (popupState,bid) => {
             
             <Row className="my-5">
                 <Col sm={12}>
-                    <h1 className="text-center">Search Books</h1>
+                    <h2 className="text-center" style={{fontFamily:"fantasy"}}>Search Books</h2>
                 </Col>
                 <Col sm={12}>
                     <Form onSubmit={handleSubmit}>
@@ -294,21 +276,8 @@ const deleteBook = (popupState,bid) => {
                                                                </TableCell>
                                                            );
                                                        })}
-                                                      {isLibrarian ?
-                                                            <PopupState variant="popover" popupId="demo-popup-menu">
-                                                                {(popupState) => (
-                                                                    <React.Fragment>
-                                                                        <Button variant="contained" {...bindTrigger(popupState)}>
-                                                                            Options
-                                                                        </Button>
-                                                                        <Menu {...bindMenu(popupState)}>
-                                                                            <MenuItem onClick={()=>{editBook(popupState,row.id)}}>Edit Book</MenuItem>
-                                                                            <MenuItem onClick={()=>{deleteBook(popupState,row.id);}}>Delete Book</MenuItem>
-                                                                        </Menu>
-                                                                    </React.Fragment>
-                                                                )}
-                                                            </PopupState> : <Button className="my-2" onClick={() => { borrowBook(row.id) }} variant="contained">Borrow</Button>} 
-                                                       {/* </TableRow> */}
+                                                       <Button className="my-2" onClick={() => { borrowBook(row.id) }} variant="contained">View Book</Button>
+                                                     
                                                    </StyledTableRow>
                                                );
                                            })}

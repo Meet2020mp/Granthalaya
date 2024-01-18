@@ -8,9 +8,10 @@ namespace granthalaya.Services
         Librarian GetLibraraianById(string id);
         Librarian GetLibraraianByName(string name);
 
-        Librarian GetLibraraianByLibraryId(string name);
+        Librarian GetLibraraianBylibraryName(string name);
         Librarian CreateLibraraian(Librarian libraraian);
         void UpdateLibrarian(string id, Librarian librarian);
         void DeleteLibrarian(string id);
+        string Login(string name, string password);
     }
 }

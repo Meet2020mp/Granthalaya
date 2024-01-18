@@ -512,3 +512,10 @@ G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\obj\Debug\net
 G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\obj\Debug\net6.0\granthalaya.pdb
 G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\obj\Debug\net6.0\granthalaya.genruntimeconfig.cache
 G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\obj\Debug\net6.0\ref\granthalaya.dll
+G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
+G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\bin\Debug\net6.0\Scrutor.dll
+G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll
+G:\Granthalaya\backend\granthalaya\Granthalaya-backend\granthalaya\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll

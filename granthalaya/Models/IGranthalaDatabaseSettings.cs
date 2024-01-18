@@ -10,5 +10,7 @@
 
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
+        string ReviewCollectionName { get; set; }
+        string Token { get; set; }
     }
 }

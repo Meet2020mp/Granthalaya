@@ -16,14 +16,18 @@ function EditBookForm() {
   const authorRef=new useRef(null);
   const publishDateRef=new useRef(null);
   const priceRef=new useRef(null);
+  const descriptionRef=new useRef(null);
   const {bookId}=useParams();
   const [book,setBook]=useState({});
+  const [description,setDescription]=useState();
   const [publishDate,setPublishDate]=useState();
   const navigate=useNavigate();
   const [isEdit,setIsEdit]=useState(false);
 
     const  fetchData=async()=>{
-    await axios.get(`https://localhost:7271/api/Books/${bookId}`).then(response=>{
+    await axios.get(`https://localhost:7271/api/Books/${bookId}`,{
+      headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+    }).then(response=>{
       setBook(response.data);
       // showPreview();
       console.log(response.data);
@@ -52,14 +56,16 @@ function EditBookForm() {
     formData.append('author',book.author)
     formData.append('publishDate',book.publishDate)
     formData.append('price',book.price)
-    formData.append('libraryId',book.libraryId)
+    formData.append('description',book.description)
+    formData.append('libraryName',book.libraryName)
     if(book.image!=null){formData.append('image',book.image);formData.append('imageName',book.image.name)}
     // formData.append('image',book.image)
     else {console.log(book);formData.append('imageName',book.imageName);formData.append('image',null)}
     formData.append('Id',bookId)
     axios.put(`https://localhost:7271/api/Books/${bookId}`,formData,{
       Headers:{
-        "Content-Type":"application/json"
+        "Content-Type":"application/json",
+        "authorization": "Bearer " + localStorage.getItem('token')
       }
     }).then(response => {
       // console.log(response.data);
@@ -111,7 +117,7 @@ function EditBookForm() {
       
     <div className="container my-4">
       <Paper elevation={5}>
-      <h2 className="text-center py-2">Edit Book:</h2>
+      <h2 className="text-center py-2" style={{fontFamily:"fantasy"}}>Edit Book:</h2>
     <Form variant="darak" className="p-3"onSubmit={handleSubmit}>
       <Form.Group controlId="formTitle">
         <Form.Label>Title</Form.Label>
@@ -132,6 +138,11 @@ function EditBookForm() {
           onChange={(event)=>{updateBook({author:event.target.value})}}
           placeholder="Enter book author"
         />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label>Book description</Form.Label>
+        <Form.Control as="textarea" rows={3} value={book.description}           onChange={(event)=>{updateBook({description:event.target.value})}}
+placeholder="Enter book description"/>
       </Form.Group>
       <Form.Group className="my-2" controlId="formPrice">
         <Form.Label>Price</Form.Label>

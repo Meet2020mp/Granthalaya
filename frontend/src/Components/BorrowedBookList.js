@@ -21,7 +21,7 @@ const columns = [
 
     { id: 'bookName', label: 'Book Name', minWidth: 150 },
 
-    { id: 'libraryId', label: 'Library Id', minWidth: 100 },
+    { id: 'libraryName', label: 'Library', minWidth: 100 },
     {
         id: 'dueDate',
         label: 'Due Date',
@@ -81,7 +81,9 @@ export default function BorrowedBooks() {
     ]);
     const [returnedBooks, setReturnedBooks] = useState();
     let fetchBooks = async () => {
-        await axios.get(`https://localhost:7271/api/BorrowedBooks/ByCustomerId/${localStorage.getItem('userId')}`).then((response) => {
+        await axios.get(`https://localhost:7271/api/BorrowedBooks/ByCustomerName/${localStorage.getItem('userName')}`,{
+            headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+          }).then((response) => {
             
             setBooks( response.data);
             setLoading(false);
@@ -108,7 +110,10 @@ export default function BorrowedBooks() {
     }, [isReturned])
     const returnBook = async (bid) => {
         // setLoading(true);
-        await axios.get(`https://localhost:7271/api/BorrowedBooks/${bid}`).then(response => {
+        await axios.get(`https://localhost:7271/api/BorrowedBooks/${bid}`,
+        {
+            headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+          }).then(response => {
             // console.log(response.data);
             setReturnedBooks(response.data);
         }).catch(err => {
@@ -127,8 +132,8 @@ export default function BorrowedBooks() {
         await axios.put(`https://localhost:7271/api/BorrowedBooks/${bid}`,
             {
                 'id': bid,
-                'libraryId': returnedBooks.libraryId,
-                'customerId': returnedBooks.customerId,
+                'libraryName': returnedBooks.libraryName,
+                'customerName': returnedBooks.customerName,
                 'issueDate': returnedBooks.issueDate,
                 'dueDate': returnedBooks.dueDate,
                 'bookId': returnedBooks.bookId,
@@ -138,7 +143,9 @@ export default function BorrowedBooks() {
                 'fine': fineDays * 10
                 // 'fine':0
             }, {
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json', 
+            "authorization": "Bearer " + localStorage.getItem('token')
+        }
         }).then(response => {
             console.log(response.data);
             setIsReturned(true);
@@ -171,7 +178,7 @@ export default function BorrowedBooks() {
     return (
         <>
             <div className="container text-center">
-                <h1>Borrowed books are:</h1>
+                <h2 style={{fontFamily:"fantasy"}}>Borrowed books are:</h2>
 
                 {isReturned && <Feedback mes="book returned!!" open={true} type="success" />}
 

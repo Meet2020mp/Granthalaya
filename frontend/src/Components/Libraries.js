@@ -57,7 +57,9 @@ export default function Libraries() {
         }
     ]);
     const fetchLibraries = async () => {
-        axios.get('https://localhost:7271/api/Libraries').then((response) => {
+        axios.get('https://localhost:7271/api/Libraries',{
+            headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+          }).then((response) => {
             setlibraries(response.data);
             setLoading(false);
             console.log(libraries);
@@ -72,19 +74,19 @@ export default function Libraries() {
         setLoading(false);
         fetchLibraries();
     }, [])
-    const addBookToLibrary=(libraryId)=>{
-        console.log(libraryId);
-        navigate(`/admin/add-book/${libraryId}`);
+    const addBookToLibrary=(libraryName)=>{
+        console.log(libraryName);
+        navigate(`/admin/add-book/${libraryName}`);
     }
-    const visitLibrary=(libraryId)=>{
-        console.log(libraryId);
-        navigate(`/admin/books/${libraryId}`);
+    const visitLibrary=(libraryName)=>{
+        console.log(libraryName);
+        navigate(`/admin/books/${libraryName}`);
     }
     var bid=0;
     return (
         <>
             <div className="container text-center">
-                <h1>Regestered libraries are:</h1>
+                <h2 style={{fontFamily:"fantasy"}}>Registered libraries are:</h2>
 
 
                 {loading ? (<Spinner animation="border" role="status" className="d-flex justify-content-center my-5">
@@ -134,8 +136,8 @@ export default function Libraries() {
                                                                 </TableCell>
                                                             );
                                                         })}
-                                                        <Button className="my-2" onClick={()=>visitLibrary(row.id)}variant="contained">Visit Library</Button>
-                                                        &nbsp;&nbsp;<Button className="my-2" onClick={()=>addBookToLibrary(row.id)}variant="contained">Add book</Button>
+                                                        <Button className="my-2" onClick={()=>visitLibrary(row.name)}variant="contained">Visit Library</Button>
+                                                        &nbsp;&nbsp;<Button className="my-2" onClick={()=>addBookToLibrary(row.name)}variant="contained">Add book</Button>
                                                     {/* </TableRow> */}
                                                     </StyledTableRow>
                                                 );

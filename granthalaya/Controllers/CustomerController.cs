@@ -1,11 +1,14 @@
 ﻿using granthalaya.Models;
 using granthalaya.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace granthalaya.Controllers
 {
+    [Authorize]
     [Route("api/Customers")]
     [ApiController]
     public class CustomerController : ControllerBase
@@ -33,11 +36,22 @@ namespace granthalaya.Controllers
             }
             return customer;
         }
-
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public ActionResult<string> Login([FromBody]LoginDTO login)
+        {
+            return _customerService.Login(login.name,login.password);
+        }
         // POST api/<CustomerController>
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult<Customer> Post([FromBody] Customer customer)
         {
+            Customer c = _customerService.GetCustomerByName(customer.name);
+            if (c != null)
+            {
+                return null;
+            }
              _customerService.CreateCustomer(customer);
             return CreatedAtAction(nameof(Get), new {id=customer.Id}, customer);
         }

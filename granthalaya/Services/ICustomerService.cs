@@ -10,5 +10,6 @@ namespace granthalaya.Services
         Customer CreateCustomer(Customer customer);
         void UpdateCustomer(string id,Customer customer);
         void DeleteCustomer(string id);
+        string Login(string name, string password);
     }
 }

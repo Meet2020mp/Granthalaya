@@ -28,26 +28,27 @@ namespace granthalaya.Services
             return _books.Find(book => book.Id == id).FirstOrDefault();
         }
 
-        public List<Book> GetBookByLibraryId(string libraryId)
+        public List<Book> GetBookBylibraryName(string libraryName)
         {
-            return _books.Find(book => book.libraryId == libraryId).ToList();
+            return _books.Find(book => book.libraryName == libraryName).ToList();
         }
 
-        public List<Book> GetBookByQuery(string parameter,string query, string libraryId)
+        public List<Book> GetBookByQuery(string? parameter,string query, string? libraryName)
         {
-            if (libraryId != "0")
+            if (libraryName != "0")
             {
+                Console.WriteLine("Hello");
                 if (parameter == "title" || parameter == "")
                 {
-                    return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower()) && book.libraryId == libraryId).ToList();
+                    return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower()) && book.libraryName == libraryName).ToList();
                 }
                 else if (parameter == "auther")
                 {
-                    return _books.Find(book => book.author.ToString().ToLower().Contains(query.ToLower()) && book.libraryId == libraryId).ToList();
+                    return _books.Find(book => book.author.ToString().ToLower().Contains(query.ToLower()) && book.libraryName == libraryName).ToList();
                 }
                 else if (parameter == "library")
                 {
-                    return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower()) && book.libraryId == libraryId).ToList();
+                    return _books.Find(book=>book.libraryName == libraryName).ToList();
 
                 }
             }
@@ -55,6 +56,7 @@ namespace granthalaya.Services
             {
                 if (parameter == "title" || parameter == "")
                 {
+                    Console.WriteLine("Hello");
                     return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower())).ToList();
                 }
                 else if (parameter == "auther")
@@ -63,7 +65,7 @@ namespace granthalaya.Services
                 }
                 else if (parameter == "library")
                 {
-                    return _books.Find(book => book.title.ToString().ToLower().Contains(query.ToLower())).ToList();
+                    return _books.Find(book => book.libraryName.ToString().ToLower().Contains(query.ToLower())).ToList();
 
                 }
             }

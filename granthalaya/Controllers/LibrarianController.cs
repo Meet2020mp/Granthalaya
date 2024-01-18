@@ -1,12 +1,14 @@
 ﻿using System.Linq.Expressions;
 using granthalaya.Models;
 using granthalaya.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace granthalaya.Controllers
 {
+    [Authorize]
     [Route("api/Librarians")]
     [ApiController]
     public class LibrarianController : ControllerBase
@@ -34,11 +36,22 @@ namespace granthalaya.Controllers
             }
             return librarian;
         }
-
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public ActionResult<string> Login([FromBody] LoginDTO login)
+        {
+            return _librarianService.Login(login.name, login.password);
+        }
+        [AllowAnonymous]
         // POST api/<LibrarianController>
         [HttpPost]
         public ActionResult<Librarian> Post([FromBody] Librarian librarian)
         {
+            Librarian l = _librarianService.GetLibraraianByName(librarian.name);
+            if (l != null)
+            {
+                return null;
+            }
             _librarianService.CreateLibraraian(librarian);
             return CreatedAtAction(nameof(Get), new { id = librarian.Id }, librarian);
         }
@@ -65,6 +78,7 @@ namespace granthalaya.Controllers
             {
                 return NotFound($"Librarian with Id {id} not exist!!");
             }
+            _librarianService.DeleteLibrarian(id);
             return Ok($"{librarian.name} Librarian deleted!!");
         }
     }

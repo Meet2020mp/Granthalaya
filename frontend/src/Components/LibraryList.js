@@ -53,7 +53,9 @@ export default function LibraryList() {
 
     ]);
     const fetchLibraries = async () => {
-        axios.get('https://localhost:7271/api/Libraries').then((response) => {
+        axios.get('https://localhost:7271/api/Libraries',{
+            headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+          }).then((response) => {
             setlibraries(response.data);
             setLoading(false);
             console.log(libraries);
@@ -68,15 +70,15 @@ export default function LibraryList() {
         setLoading(false);
         fetchLibraries();
     }, [])
-    const visitLibrary=(libraryId)=>{
-        console.log(libraryId);
-        navigate(`/books/${libraryId}`);
+    const visitLibrary=(libraryName)=>{
+        console.log(libraryName);
+        navigate(`/books/${libraryName}`);
     }
     var bid=0;
     return (
         <>
             <div className="container text-center">
-                <h1>Regestered libraries are:</h1>
+                <h2 style={{fontFamily:"fantasy"}}>Registered libraries are:</h2>
                 {loading ? (<Spinner animation="border" role="status" className="d-flex justify-content-center my-5">
                     <span className="sr-only"></span>
                 </Spinner>) :
@@ -124,7 +126,7 @@ export default function LibraryList() {
                                                                 </TableCell>
                                                             );
                                                         })}
-                                                        <Button className="my-2" onClick={()=>visitLibrary(row.id)}variant="contained">Visit Library</Button>
+                                                        <Button className="my-2" onClick={()=>visitLibrary(row.name)}variant="contained">Visit Library</Button>
                                                     {/* </TableRow> */}
                                                     </StyledTableRow>
                                                 );

@@ -16,6 +16,7 @@ import AddLibrarian from './Components/AddLibrarian';
 import EditBookForm from './Components/EditBook';
 import Search from './Components/Search';
 import BorrowedBooksFromLibrary from './Components/BorrowedBooksFromLibrary';
+import Book from './Components/Book';
 export const LoginContext = createContext({
   isLoggedIn: false,
   isLibrarian:false,
@@ -49,18 +50,19 @@ function App() {
     <Routes>
       <Route path="/" element={<Home/>}/>
       <Route path="/admin" element={<Home/>}/>
-      <Route path="/admin/add-book/:libraryId" element={<AddBookForm/>}/>
-      <Route path="/admin/borrowed-books/:libraryId" element={<BorrowedBooksFromLibrary/>}/>
+      <Route path="/admin/add-book/:libraryName" element={<AddBookForm/>}/>
+      <Route path="/admin/borrowed-books/:libraryName" element={<BorrowedBooksFromLibrary/>}/>
       <Route path="/admin/edit-book/:bookId" element={<EditBookForm/>}/>
       <Route path="/admin/libraries" element={<Libraries/>}/>
       <Route path="/admin/add-library" element={<AddLibraryForm/>}/>
       <Route path="/admin/add-librarian" element={<AddLibrarian/>}/>
-      <Route path="/books/:libraryId" element={<BookList/>}/>
-      <Route path="/admin/books/:libraryId" element={<BookList isAdmin='true'/>}/>
+      <Route path="/books/:libraryName" element={<BookList/>}/>
+      <Route path="/book/:bookId" element={<Book/>}/>
+      <Route path="/admin/books/:libraryName" element={<BookList isAdmin='true'/>}/>
       <Route path="/libraries" element={<LibraryList/>}/>
       <Route path="/login" element={<Login/>}/>
-      <Route path="/search/:libraryId" element={<Search/>}/>
-      <Route path="/librarian/search/:libraryId" element={<Search/>}/>
+      <Route path="/search/:libraryName" element={<Search/>}/>
+      <Route path="/librarian/search/:libraryName" element={<Search/>}/>
       <Route path="/signup" element={<SignUp/>}/>
       <Route path="/borrowed-books" element={<BorrowedBooks/>}/>
     </Routes>

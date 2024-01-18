@@ -8,7 +8,7 @@ import { LoginContext } from '../App';
 
 function Header() {
   const {isLoggedIn,setIsLoggedIn,setIsLibrarian,setIsAdmin}=useContext(LoginContext);
-  const libId=localStorage.getItem('libraryId');
+  const libId=localStorage.getItem('libraryName');
   const isAdmin=localStorage.getItem('isAdmin');
   const userId=localStorage.getItem('userId');
   console.log(libId);
@@ -18,7 +18,7 @@ function Header() {
     e.preventDefault();
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
-    localStorage.removeItem('libraryId');
+    localStorage.removeItem('libraryName');
     localStorage.removeItem('isAdmin');
     setIsLoggedIn(false);
     setIsLibrarian(false);

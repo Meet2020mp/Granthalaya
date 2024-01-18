@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import { useNavigate } from "react-router-dom";
 import { LoginContext,UserContext } from "../App";
 import { Link } from "@mui/material";
+import Feedback from "../Utils/feedbacks";
 export default function SignUp() {
   const userNameRef = useRef(null);
   const passwordRef = useRef(null);
@@ -14,6 +15,7 @@ export default function SignUp() {
   const emailRef = useRef(null);
   const navigate=useNavigate();
   const [loading, setLoading] = useState(true);
+  const [exist, setExist] = useState(false);
   const {setIsLoggedIn,setIsLibrarian}=useContext(LoginContext);
   const {setUserId,setUserName}=useContext(UserContext);
   const [libraries, setLibraries] = useState([
@@ -45,7 +47,7 @@ export default function SignUp() {
   }
   useEffect(()=>{
     fetchLibraries();
-  },[])
+  },[exist])
   const styles = {
     paperContainer: {
         height: "100%",
@@ -61,6 +63,8 @@ export default function SignUp() {
 };
   const handleSubmit = (e) => {
     e.preventDefault();
+    setExist(false);
+
     // const libId=libraryRef.current.value;
     // console.log(libId);
     if(!librarianRef.current.checked) {
@@ -74,21 +78,28 @@ export default function SignUp() {
         'email':emailRef.current.value,
         'phoneNumber':phoneRef.current.value,
         'password':passwordRef.current.value,
+        'role':'Customer',
         'borrowedBooks':[]
       },{
         headers: {
           "Access-Control-Allow-Origin": "*",
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         }
       }).then(response=>{
-        console.log(response.data);
-        setIsLoggedIn(true);
-        setIsLibrarian(false);
-        setUserId(response.data.id);
-        setUserName(response.data.name);
-        localStorage.setItem('userName',response.data.name);
-        localStorage.setItem('userId',response.data.id);  
-        navigate('/');
+        if(response.data==''){
+          setExist(true);
+        }
+        else{
+          console.log(response.data);
+          // localStorage.setItem('userName',response.data.name);
+          navigate('/login');
+        }
+        // setIsLoggedIn(true);
+        // setIsLibrarian(false);
+        // setUserId(response.data.id);
+        // setUserName(response.data.name);
+        // localStorage.setItem('userId',response.data.name);  
+        // navigate('/');
       }).catch(e=>{
         console.log(e);
       })
@@ -99,29 +110,36 @@ export default function SignUp() {
         "email":emailRef.current.value,
         "password":passwordRef.current.value,
         "phoneNumber":phoneRef.current.value,
-        "libraryId":libraryRef.current.value
+        "role":"Librarian",
+        "libraryName":libraryRef.current.value
       },{
         headers: {
           'Content-Type': 'application/json'
         }
       }).then(response=>{
         // console.log(response.data);
-        setIsLoggedIn(true);
-        setIsLibrarian(true);
-        setUserId(response.data.Id);
-        setUserName(response.data.name);
-        localStorage.setItem('userName',response.data.name);        
-        localStorage.setItem('userId',response.data.id);   
-        localStorage.setItem('libraryId',response.data.libraryId);    
-        navigate('/admin');
-
+        // setIsLoggedIn(true);
+        // setIsLibrarian(true);
+        // setUserId(response.data.Id);
+        // setUserName(response.data.name);
+        if(response.data==''){
+          setExist(true);
+        }
+        else{
+        // localStorage.setItem('userName',response.data.name);          
+        // localStorage.setItem('libraryName',response.data.libraryName);    
+        navigate('/login');
+        }
       }).catch(e=>{
         console.log(e);
       })
     }
   }
   return (
+    <>
+          {exist && <Feedback mes="User name already used" type="error" open={true}/>}
     <div  style={styles.paperContainer}>
+
       <Paper elevation={5} className="container w-50  py-3" style={styles.bg}>
         <h2 className="my-3 text-center">Register!!</h2>
         <Row className="justify-content-md-center mt-5">
@@ -154,7 +172,7 @@ export default function SignUp() {
                 <option value="-1">Add library</option>
                 {libraries.map(library => (
 
-                  <option value={library.id}>{library.name}</option>
+                  <option value={library.name}>{library.name}</option>
                 ))}
               </Form.Select> 
               <Button className="my-3" variant="primary" type="submit" block>
@@ -169,5 +187,6 @@ export default function SignUp() {
       </Paper>
 
     </div>
+    </>
   )
 }
