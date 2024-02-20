@@ -10,14 +10,18 @@ export default function SignUp() {
   const userNameRef = useRef(null);
   const passwordRef = useRef(null);
   const librarianRef = useRef(null);
+  const otpRef = useRef(null);
   const libraryRef = useRef(null);
   const phoneRef=useRef(null);
   const emailRef = useRef(null);
   const navigate=useNavigate();
+  const [otp,setOtp]=useState(null);
   const [loading, setLoading] = useState(true);
   const [exist, setExist] = useState(false);
   const {setIsLoggedIn,setIsLibrarian}=useContext(LoginContext);
   const {setUserId,setUserName}=useContext(UserContext);
+  const subject="OTP from Granthaaya!!"
+  // var body="Hello "+ userNameRef.current.value+'</br> OTP: 1234';
   const [libraries, setLibraries] = useState([
     {
       "id": 1,
@@ -61,6 +65,41 @@ export default function SignUp() {
       backgroundColor: 'transparent'
     }
 };
+const handleSendOtp=()=>{
+  //send mail contanig otp
+  try{
+    axios.post('https://localhost:7271/api/Customers/SendOTP',{
+      'email':emailRef.current.value,
+      'name':userNameRef.current.value,
+      'password':''
+    },{
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        'Content-Type': 'application/json',
+      }
+    }).then(response=>{
+      // console.log(response)
+      setOtp(response.data);
+    })
+  
+  document.getElementById('formSendOtp').hidden=true;
+  document.getElementById('formCheckOtp').hidden=false;
+  document.getElementById('formOtp').hidden=false;
+  }
+  catch(e){
+
+  }
+}
+const handleCheckOtp=()=>{
+  console.log(otpRef.current.value);
+  if(otpRef.current.value==otp){
+    document.getElementById('formCheckOtp').hidden=true;
+    document.getElementById('formSubmit').hidden=false;
+  }
+  else{
+    //show popup
+  }
+}
   const handleSubmit = (e) => {
     e.preventDefault();
     setExist(false);
@@ -174,8 +213,21 @@ export default function SignUp() {
 
                   <option value={library.name}>{library.name}</option>
                 ))}
-              </Form.Select> 
-              <Button className="my-3" variant="primary" type="submit" block>
+              </Form.Select>
+              <Form.Group className="my-3"  hidden controlId="formOtp" id="formOtp">
+                <Form.Label>Enter OTP: </Form.Label>
+                <Form.Control name="Otp" type="text" placeholder="Enter OTP: " ref={otpRef} />
+              </Form.Group> 
+              <Button className="my-3" id="formSendOtp" onClick={handleSendOtp} variant="primary">
+              {/* <a href="mailto:`{email}`?subject={subject}&body={body}"> */}
+                Send OTP
+                {/* </a> */}
+              </Button>
+              <Button hidden className="my-3" id="formCheckOtp" onClick={handleCheckOtp} variant="primary">
+                Check OTP
+              </Button>
+              
+              <Button hidden id="formSubmit" className="my-3" variant="primary" type="submit" block>
                 Submit
               </Button>
             </Form>

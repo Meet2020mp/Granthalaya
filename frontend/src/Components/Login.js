@@ -23,7 +23,13 @@ export default function Login() {
       try{
         axios.post(`https://localhost:7271/api/Librarians/Login`,{
           'name':userName,
-          'password':password
+          'password':password,
+          'email':' '
+        },{
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+          }
         }).then((response) => {
           console.log(response);
           // if(response.data.name===userName && response.data.password===password && userName === 'admin'){
@@ -82,7 +88,8 @@ export default function Login() {
       try{
         axios.post(`https://localhost:7271/api/Customers/Login`,{
           'name':userName,
-          'password':password
+          'password':password,
+          'email':''
         }).then((response) => {
           console.log(response.data);
           if(response.status==200){

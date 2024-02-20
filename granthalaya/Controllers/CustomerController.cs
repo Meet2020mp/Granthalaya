@@ -42,6 +42,12 @@ namespace granthalaya.Controllers
         {
             return _customerService.Login(login.name,login.password);
         }
+        [AllowAnonymous]
+        [HttpPost("SendOTP")]
+        public ActionResult<int> SendOTP([FromBody]LoginDTO login)
+        {
+            return SendMail.MailSender(login.email, login.name);
+        }
         // POST api/<CustomerController>
         [AllowAnonymous]
         [HttpPost]
