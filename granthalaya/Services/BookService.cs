@@ -76,6 +76,10 @@ namespace granthalaya.Services
         {
             return _books.Find(book=>true).ToList();
         }
+        public int GetBooksCount()
+        {
+            return _books.Find(book => true).ToList().Count();
+        }
 
         public void UpdateBook(string id, Book book)
         {

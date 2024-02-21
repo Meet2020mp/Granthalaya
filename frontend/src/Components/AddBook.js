@@ -59,7 +59,7 @@ function AddBookForm() {
     // console.log(formData);
     axios.post('https://localhost:7271/api/Books/',formData,{
       headers:{
-        "Content-Type":"application/json",
+        "Content-Type":"multipart/form-data",
         "authorization": "Bearer " + localStorage.getItem('token')
       }
     }).then(response => {

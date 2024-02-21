@@ -1,10 +1,22 @@
 ﻿using System.Net.Mail;
 using System.Net;
+using granthalaya.Models;
+using MongoDB.Driver;
 
 namespace granthalaya.Services
 {
-    public class SendMail
+    public class KeyFunctions
     {
+        private readonly IMongoCollection<Book> _books;
+        private readonly IMongoCollection<Library> _libraries;
+        private readonly IMongoCollection<Customer> _customers;
+        public KeyFunctions(IGranthalaDatabaseSettings settings,IMongoClient mongoClient)
+        {
+            var database = mongoClient.GetDatabase(settings.DatabaseName);
+            _books = database.GetCollection<Book>(settings.BookCollectionName);
+            _libraries = database.GetCollection<Library>(settings.LibraryCollectionName);
+            _customers = database.GetCollection<Customer>(settings.CustomerCollectionName);
+        }
         public static int MailSender(string email, string userName)
         {
             string fromMail = "samplephpsendmail@gmail.com";
@@ -27,6 +39,14 @@ namespace granthalaya.Services
 
             smtpClient.Send(message);
             return otp;
+        }
+        public Demographics GetDemographics()
+        {
+            Demographics demographics = new Demographics();
+            demographics.books = _books.Find(b=>true).ToList().Count();
+            demographics.libraries = _libraries.Find(l => true).ToList().Count();
+            demographics.customers = _customers.Find(c => true).ToList().Count();
+            return demographics;
         }
     }
 }

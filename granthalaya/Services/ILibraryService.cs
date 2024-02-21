@@ -5,6 +5,7 @@ namespace granthalaya.Services
     public interface ILibraryService
     {
         List<Library> GetLibraries();
+        int GetLibrariesCount();
         Library GetLibraryByName(string name);
         Library GetLibraryById(string id);
         Library CreateLibrary(Library library);

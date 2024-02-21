@@ -24,16 +24,12 @@ namespace granthalaya.Controllers
         {
             return _customerService.GetCustomers();
         }
-
+        [AllowAnonymous]
         // GET api/<CustomerController>/5
         [HttpGet("{name}")]
         public ActionResult<Customer> Get(string name)
         {
             var customer= _customerService.GetCustomerByName(name);
-            if (customer == null)
-            {
-                return NotFound("Customer not exist!!");
-            }
             return customer;
         }
         [AllowAnonymous]
@@ -43,10 +39,16 @@ namespace granthalaya.Controllers
             return _customerService.Login(login.name,login.password);
         }
         [AllowAnonymous]
+        [HttpGet("GetDemographics")]
+        public ActionResult<Demographics> HomePageData()
+        {
+            return _customerService.GetDemographics();
+        }
+        [AllowAnonymous]
         [HttpPost("SendOTP")]
         public ActionResult<int> SendOTP([FromBody]LoginDTO login)
         {
-            return SendMail.MailSender(login.email, login.name);
+            return KeyFunctions.MailSender(login.email, login.name);
         }
         // POST api/<CustomerController>
         [AllowAnonymous]

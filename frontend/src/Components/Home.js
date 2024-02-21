@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import Carousel from 'react-bootstrap/Carousel';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import './Home.css';
+import axios from "axios";
 import Figure from 'react-bootstrap/Figure';
+import { Spinner } from 'react-bootstrap';
 
 function Home(){
+  const [demographics,setDemographics]= useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchLibraries = () => {
+    try {
+      axios.get('https://localhost:7271/api/Customers/GetDemographics').then((response) => {
+        console.log(response.data)
+        setDemographics(response.data);
+        setLoading(false);
+      });
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
+    }
+  }
+  useEffect(()=>{
+    fetchLibraries();
+  },[])
     return(
         <>
 <Carousel style={{"height":"500px"}}variant="dark">
@@ -50,12 +70,15 @@ function Home(){
         </Carousel.Caption>
       </Carousel.Item>
     </Carousel>
+    {loading ? (<Spinner animation="border" role="status" className="d-flex justify-content-center my-5">
+                    <span className="sr-only"></span>
+                </Spinner>) :
     <div className="my-5 container text-center">
     <Figure className="px-4">
       
       <Figure.Caption>
         <h1 className="numbers">
-        Total libraries: 10
+        Total libraries: {demographics.libraries}
         </h1>
       </Figure.Caption>
     </Figure>
@@ -64,7 +87,7 @@ function Home(){
       
       <Figure.Caption>
         <h1 className="numbers">
-        Total Books: 100+
+        Total Books: {demographics.books}
         </h1>
       </Figure.Caption>
     </Figure>
@@ -72,11 +95,11 @@ function Home(){
       
       <Figure.Caption>
       <h1 className="numbers">
-        Total customers: 200+
+        Total customers: {demographics.customers}
       </h1>
       </Figure.Caption>
     </Figure>
-    </div>
+    </div>}
     </>        
     )
 }

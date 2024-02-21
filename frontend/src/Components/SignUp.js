@@ -16,6 +16,14 @@ export default function SignUp() {
   const emailRef = useRef(null);
   const navigate=useNavigate();
   const [otp,setOtp]=useState(null);
+  const [emailEmpty,setEmailEmpty]=useState(false);
+  const [nameEmpty,setNameEmpty]=useState(false);
+  const [phoneEmpty,setPhoneEmpty]=useState(false);
+  const [libraryEmpty,setLibraryEmpty]=useState(false);
+  const [passwordEmpty,setPasswordEmpty]=useState(false);
+  const [duplicate,setDuplicate]=useState(false);
+  const [wrongOtp,setWrongOtp]=useState(false);
+  const [fetchedData,setFetchedData]=useState(null);
   const [loading, setLoading] = useState(true);
   const [exist, setExist] = useState(false);
   const {setIsLoggedIn,setIsLibrarian}=useContext(LoginContext);
@@ -37,6 +45,46 @@ export default function SignUp() {
     addlibrary.toggleAttribute('disabled');
     // addlibrary.classList.toggle('invisible');
   }
+  const fetchCustomer =()=>{
+    try{
+      axios.get(`https://localhost:7271/api/Customers/${userNameRef.current.value}`,{
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
+      }).then((response)=>{
+        if(response.data!=''){
+          setDuplicate(true);
+        }
+        else{
+          document.getElementById('formVerifyField').hidden=true;
+          document.getElementById('formSendOtp').hidden=false;
+        }
+      })
+    }
+    catch(e){
+      console.log(e);
+    }
+  }
+  const fetchLibrarian =()=>{
+    try{
+      axios.get(`https://localhost:7271/api/Librarians/${userNameRef.current.value}`,{
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
+      }).then((response)=>{
+        if(response.data!=''){
+          setDuplicate(true);
+        }
+        else{
+          document.getElementById('formVerifyField').hidden=true;
+          document.getElementById('formSendOtp').hidden=false;
+        }
+      })
+    }
+    catch(e){
+      console.log(e);
+    }
+  }
   const fetchLibraries = () => {
     try {
       axios.get('https://localhost:7271/api/Libraries').then((response) => {
@@ -49,9 +97,43 @@ export default function SignUp() {
       setLoading(false);
     }
   }
+  const handleDuplication=()=>{
+    setDuplicate(false);
+    setEmailEmpty(false);
+    setNameEmpty(false);
+    setPhoneEmpty(false);
+    setPasswordEmpty(false);
+    setLibraryEmpty(false);
+    if(userNameRef.current.value==''){
+      setNameEmpty(true);
+    }
+    if(emailRef.current.value==''){
+      setEmailEmpty(true);
+      return;
+    }
+    if(phoneRef.current.value==''){
+      setPhoneEmpty(true);
+      return;
+    }
+    if(passwordRef.current.value==''){
+      setPasswordEmpty(true);
+      return;
+    }
+    if(librarianRef.current.checked){
+      if(libraryRef.current.value=='-1'){
+        setLibraryEmpty(true);
+        return;
+      }
+      fetchLibrarian()
+    }
+    else{
+      console.log('in customer')
+      fetchCustomer()
+    }
+  }
   useEffect(()=>{
     fetchLibraries();
-  },[exist])
+  },[])
   const styles = {
     paperContainer: {
         height: "100%",
@@ -92,12 +174,13 @@ const handleSendOtp=()=>{
 }
 const handleCheckOtp=()=>{
   console.log(otpRef.current.value);
+  setWrongOtp(false);
   if(otpRef.current.value==otp){
     document.getElementById('formCheckOtp').hidden=true;
     document.getElementById('formSubmit').hidden=false;
   }
   else{
-    //show popup
+    setWrongOtp(true);
   }
 }
   const handleSubmit = (e) => {
@@ -176,7 +259,14 @@ const handleCheckOtp=()=>{
   }
   return (
     <>
-          {exist && <Feedback mes="User name already used" type="error" open={true}/>}
+          {duplicate && <Feedback mes="User name already used" type="error" open={true}/>}
+          {emailEmpty && <Feedback mes="Email required" type="error" open={true}/>}
+          {nameEmpty && <Feedback mes="User name required" type="error" open={true}/>}
+          {phoneEmpty && <Feedback mes="Phone number required" type="error" open={true}/>}
+          {passwordEmpty && <Feedback mes="Password required" type="error" open={true}/>}
+          {libraryEmpty && <Feedback mes="Library required" type="error" open={true}/>}
+          {wrongOtp && <Feedback mes="Wrong OTP!!" type="error" open={true}/>}
+
     <div  style={styles.paperContainer}>
 
       <Paper elevation={5} className="container w-50  py-3" style={styles.bg}>
@@ -198,7 +288,7 @@ const handleCheckOtp=()=>{
               </Form.Group>
               <Form.Group className="my-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control name="Password"type="password" placeholder="Password" ref={passwordRef} />
+                <Form.Control required name="Password"type="password" placeholder="Password" ref={passwordRef} />
               </Form.Group>
                <Form.Check
                 type="checkbox"
@@ -218,10 +308,11 @@ const handleCheckOtp=()=>{
                 <Form.Label>Enter OTP: </Form.Label>
                 <Form.Control name="Otp" type="text" placeholder="Enter OTP: " ref={otpRef} />
               </Form.Group> 
-              <Button className="my-3" id="formSendOtp" onClick={handleSendOtp} variant="primary">
-              {/* <a href="mailto:`{email}`?subject={subject}&body={body}"> */}
+              <Button className="my-3" id="formVerifyField" onClick={handleDuplication} variant="primary">
+               Verify Fields
+              </Button>
+              <Button hidden className="my-3" id="formSendOtp" onClick={handleSendOtp} variant="primary">
                 Send OTP
-                {/* </a> */}
               </Button>
               <Button hidden className="my-3" id="formCheckOtp" onClick={handleCheckOtp} variant="primary">
                 Check OTP
