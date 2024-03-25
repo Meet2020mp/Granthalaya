@@ -16,9 +16,10 @@ export default function Feedback(props){
       return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
     const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-          return;
-        }
+      // setOpen(true);
+        // if (reason === 'clickaway') {
+        //   return;
+        // }
         setOpen(false);
       };
   const handleClick = (message) => () => {
@@ -29,10 +30,12 @@ export default function Feedback(props){
   };
   useEffect(()=>{
     console.log(props.mes);
-    setMessageInfo(props.mes)
-    setOpen(props.open)
-    setFeedbackType(props.type)
-  },[])
+    // setMessageInfo(props.mes)
+    
+    // setOpen(false)
+    
+    // setFeedbackType(props.type)
+  })
   return(
   // <Snackbar
   //       key={messageInfo ? messageInfo.key : undefined}
@@ -64,9 +67,9 @@ export default function Feedback(props){
       <Snackbar open={open} anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
-        }} autoHideDuration={1000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={feedbackType} sx={{ width: '100%' }}>
-          {messageInfo}
+        }} autoHideDuration={10000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={props.type} sx={{ width: '100%' }}>
+          {props.mes}
         </Alert>
       </Snackbar>
     </Stack>

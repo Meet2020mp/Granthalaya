@@ -24,6 +24,10 @@ namespace granthalaya.Services
         {
             return _libraries.Find(library=>true).ToList();
         }
+        public int GetLibrariesCount()
+        {
+            return _libraries.Find(library => true).ToList().Count();
+        }
 
         public Library GetLibraryById(string id)
         {

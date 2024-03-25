@@ -63,8 +63,8 @@ function EditBookForm() {
     else {console.log(book);formData.append('imageName',book.imageName);formData.append('image',null)}
     formData.append('Id',bookId)
     axios.put(`https://localhost:7271/api/Books/${bookId}`,formData,{
-      Headers:{
-        "Content-Type":"application/json",
+      headers:{
+        "Content-Type":"multipart/form-data",
         "authorization": "Bearer " + localStorage.getItem('token')
       }
     }).then(response => {

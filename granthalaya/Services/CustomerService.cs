@@ -9,9 +9,11 @@ namespace granthalaya.Services
     {
         private readonly IMongoCollection<Customer> _customers;
         private readonly IGranthalaDatabaseSettings _settings;
+        private readonly IMongoClient _mongoClient;
         public CustomerService(IGranthalaDatabaseSettings settings,IMongoClient mongoClient)
         {
             _settings = settings;
+            _mongoClient = mongoClient;
             var database= mongoClient.GetDatabase(settings.DatabaseName);
             _customers=database.GetCollection<Customer>(settings.CustomerCollectionName);
         }
@@ -89,7 +91,15 @@ namespace granthalaya.Services
         {
             return _customers.Find(x => true).ToList();
         }
-
+        public int GetCustomersCount()
+        {
+            return _customers.Find(x => true).ToList().Count();
+        }
+        public Demographics GetDemographics()
+        {
+            KeyFunctions functions = new KeyFunctions(_settings, _mongoClient);
+            return functions.GetDemographics();
+        }
         public void UpdateCustomer(string id, Customer customer)
         {
             _customers.ReplaceOne(x=>x.Id==id, customer);

@@ -24,16 +24,13 @@ namespace granthalaya.Controllers
         {
             return _librarianService.GetLibrarian();
         }
+        [AllowAnonymous]
 
         // GET api/<LibrarianController>/5
         [HttpGet("{name}")]
         public ActionResult<Librarian> Get(string name)
         {
             var librarian = _librarianService.GetLibraraianByName(name);
-            if (librarian == null)
-            {
-                return NotFound($"Librarian not exist!!");
-            }
             return librarian;
         }
         [AllowAnonymous]
