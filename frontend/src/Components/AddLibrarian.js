@@ -41,7 +41,7 @@ export default function AddLibrarian() {
   ]);
   const fetchLibraries = () => {
     try {
-      axios.get('https://localhost:7271/api/Libraries',{
+      axios.get('https://granthalaya.bsite.net/api/Libraries',{
         headers:{
           "authorization": "Bearer " + localStorage.getItem('token')
 
@@ -64,7 +64,7 @@ export default function AddLibrarian() {
     const libId=libraryRef.current.value;
     console.log(libId);
       
-       axios.post('https://localhost:7271/api/Librarians',{
+       axios.post('https://granthalaya.bsite.net/api/Librarians',{
         'name':userNameRef.current.value,
         'email':emailRef.current.value,
         'phoneNumber':phoneRef.current.value,

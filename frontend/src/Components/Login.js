@@ -21,7 +21,7 @@ export default function Login() {
     const password = passwordRef.current.value;
     if(librarianRef.current.checked){
       try{
-        axios.post(`https://localhost:7271/api/Librarians/Login`,{
+        axios.post(`https://granthalaya.bsite.net/api/Librarians/Login`,{
           'name':userName,
           'password':password,
           'email':' '
@@ -86,7 +86,7 @@ export default function Login() {
       }
     }else{
       try{
-        axios.post(`https://localhost:7271/api/Customers/Login`,{
+        axios.post(`https://granthalaya.bsite.net/api/Customers/Login`,{
           'name':userName,
           'password':password,
           'email':''

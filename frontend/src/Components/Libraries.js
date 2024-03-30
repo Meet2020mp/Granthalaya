@@ -57,7 +57,7 @@ export default function Libraries() {
         }
     ]);
     const fetchLibraries = async () => {
-        axios.get('https://localhost:7271/api/Libraries',{
+        axios.get('https://granthalaya.bsite.net/api/Libraries',{
             headers: { "authorization": "Bearer " + localStorage.getItem('token') }
           }).then((response) => {
             setlibraries(response.data);

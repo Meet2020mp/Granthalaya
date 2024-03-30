@@ -47,7 +47,7 @@ export default function SignUp() {
   }
   const fetchCustomer =()=>{
     try{
-      axios.get(`https://localhost:7271/api/Customers/${userNameRef.current.value}`,{
+      axios.get(`https://granthalaya.bsite.net/api/Customers/${userNameRef.current.value}`,{
         headers: {
           "Access-Control-Allow-Origin": "*",
         }
@@ -67,7 +67,7 @@ export default function SignUp() {
   }
   const fetchLibrarian =()=>{
     try{
-      axios.get(`https://localhost:7271/api/Librarians/${userNameRef.current.value}`,{
+      axios.get(`https://granthalaya.bsite.net/api/Librarians/${userNameRef.current.value}`,{
         headers: {
           "Access-Control-Allow-Origin": "*",
         }
@@ -87,7 +87,12 @@ export default function SignUp() {
   }
   const fetchLibraries = () => {
     try {
-      axios.get('https://localhost:7271/api/Libraries').then((response) => {
+      axios.get('https://granthalaya.bsite.net/api/Libraries',{
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': 'application/json',
+        }
+      }).then((response) => {
         setLibraries(response.data);
         setLoading(false);
         // console.log(libraries);
@@ -122,17 +127,17 @@ export default function SignUp() {
       setPasswordEmpty(true);
       return;
     }
-    if(librarianRef.current.checked){
-      if(libraryRef.current.value=='-1'){
-        setLibraryEmpty(true);
-        return;
-      }
-      fetchLibrarian()
-    }
-    else{
+    // if(librarianRef.current.checked){
+    //   if(libraryRef.current.value=='-1'){
+    //     setLibraryEmpty(true);
+    //     return;
+    //   }
+    //   fetchLibrarian()
+    // }
+    // else{
       // console.log('in customer')
       fetchCustomer()
-    }
+    // }
   }
   useEffect(()=>{
     fetchLibraries();
@@ -153,7 +158,7 @@ export default function SignUp() {
 const handleSendOtp=()=>{
   //send mail contanig otp
   try{
-    axios.post('https://localhost:7271/api/Customers/SendOTP',{
+    axios.post('https://granthalaya.bsite.net/api/Customers/SendOTP',{
       'email':emailRef.current.value,
       'name':userNameRef.current.value,
       'password':''
@@ -195,13 +200,13 @@ const handleCheckOtp=()=>{
 
     // const libId=libraryRef.current.value;
     // console.log(libId);
-    if(!librarianRef.current.checked) {
-      // axios.get('https://localhost:7271/api/Customers').then(response=>{
+    // if(!librarianRef.current.checked) {
+      // axios.get('https://granthalaya.bsite.net/api/Customers').then(response=>{
       //   console.log(response.data);
       // }).catch(e=>{
       //   console.log(e);
       // })
-      axios.post('https://localhost:7271/api/Customers',{
+      axios.post('https://granthalaya.bsite.net/api/Customers',{
         'name':userNameRef.current.value,
         'email':emailRef.current.value,
         'phoneNumber':phoneRef.current.value,
@@ -232,36 +237,36 @@ const handleCheckOtp=()=>{
         console.log(e);
       })
       
-    }else{
-      axios.post('https://localhost:7271/api/Librarians',{
-        "name":userNameRef.current.value,
-        "email":emailRef.current.value,
-        "password":passwordRef.current.value,
-        "phoneNumber":phoneRef.current.value,
-        "role":"Librarian",
-        "libraryName":libraryRef.current.value
-      },{
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(response=>{
-        // console.log(response.data);
-        // setIsLoggedIn(true);
-        // setIsLibrarian(true);
-        // setUserId(response.data.Id);
-        // setUserName(response.data.name);
-        if(response.data==''){
-          setExist(true);
-        }
-        else{
-        // localStorage.setItem('userName',response.data.name);          
-        // localStorage.setItem('libraryName',response.data.libraryName);    
-        navigate('/login');
-        }
-      }).catch(e=>{
-        console.log(e);
-      })
-    }
+    // }else{
+    //   axios.post('https://granthalaya.bsite.net/api/Librarians',{
+    //     "name":userNameRef.current.value,
+    //     "email":emailRef.current.value,
+    //     "password":passwordRef.current.value,
+    //     "phoneNumber":phoneRef.current.value,
+    //     "role":"Librarian",
+    //     "libraryName":libraryRef.current.value
+    //   },{
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     }
+    //   }).then(response=>{
+    //     // console.log(response.data);
+    //     // setIsLoggedIn(true);
+    //     // setIsLibrarian(true);
+    //     // setUserId(response.data.Id);
+    //     // setUserName(response.data.name);
+    //     if(response.data==''){
+    //       setExist(true);
+    //     }
+    //     else{
+    //     // localStorage.setItem('userName',response.data.name);          
+    //     // localStorage.setItem('libraryName',response.data.libraryName);    
+    //     navigate('/login');
+    //     }
+    //   }).catch(e=>{
+    //     console.log(e);
+    //   })
+    // }
   }
   return (
     <>
@@ -296,20 +301,20 @@ const handleCheckOtp=()=>{
                 <Form.Label>Password</Form.Label>
                 <Form.Control required name="Password"type="password" placeholder="Password" ref={passwordRef} />
               </Form.Group>
-               <Form.Check
+               {/* <Form.Check
                 type="checkbox"
                 id={`isLibrarian`}
                 label="Are you Librarian?"
                 ref={librarianRef}
                 onChange={aaddLibraryField}
-              />
-              <Form.Select name="library"ref={libraryRef} disabled id="addLibrary" className="my-3" aria-label="Default select example">
+              /> */}
+              {/* <Form.Select name="library"ref={libraryRef} disabled id="addLibrary" className="my-3" aria-label="Default select example">
                 <option value="-1">Add library</option>
                 {libraries.map(library => (
 
                   <option value={library.name}>{library.name}</option>
                 ))}
-              </Form.Select>
+              </Form.Select> */}
               <Form.Group className="my-3"  hidden controlId="formOtp" id="formOtp">
                 <Form.Label>Enter OTP: </Form.Label>
                 <Form.Control name="Otp" type="text" placeholder="Enter OTP: " ref={otpRef} />

@@ -17,7 +17,7 @@ function AddLibraryForm() {
     }
     console.log(library);
 
-    axios.post(`https://localhost:7271/api/Libraries`,library,{
+    axios.post(`https://granthalaya.bsite.net/api/Libraries`,library,{
       headers: {
         'Content-Type': 'application/json',
         "authorization": "Bearer " + localStorage.getItem('token')

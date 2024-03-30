@@ -26,7 +26,7 @@ function AddBookForm() {
   const [imgname,setImgName]=useState("/b1.jpg");
   const [img,setImg]=useState();
   const fetchData=()=>{
-    axios.get(`https://localhost:7271/api/Libraries/${libraryName}`,{
+    axios.get(`https://granthalaya.bsite.net/api/Libraries/${libraryName}`,{
       headers:{
         "authorization": "Bearer " + localStorage.getItem('token')
       }
@@ -57,7 +57,7 @@ function AddBookForm() {
     formData.append('image',img)
     formData.append('imageName',imgname)
     // console.log(formData);
-    axios.post('https://localhost:7271/api/Books/',formData,{
+    axios.post('https://granthalaya.bsite.net/api/Books/',formData,{
       headers:{
         "Content-Type":"multipart/form-data",
         "authorization": "Bearer " + localStorage.getItem('token')

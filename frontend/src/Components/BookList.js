@@ -93,11 +93,11 @@ export default function BookList(props) {
 
     ]);
     const fetchBooks = async () => {
-        // axios.get(`https://localhost:7271/api/Libraries/${libraryName}`).then(response => {
+        // axios.get(`https://granthalaya.bsite.net/api/Libraries/${libraryName}`).then(response => {
         //     setLibraryName(response.data.name);
         //     // console.log(libraryName);
         // })
-        axios.get(`https://localhost:7271/api/Books/BylibraryName/${libraryName}`,{
+        axios.get(`https://granthalaya.bsite.net/api/Books/BylibraryName/${libraryName}`,{
             headers: { "authorization": "Bearer " + localStorage.getItem('token') }
           }).then((response) => {
             setBooks(response.data);
@@ -121,7 +121,7 @@ export default function BookList(props) {
     const storeData = async (bid) => {
         setIsBorrowed(false);
         var bookBorrow;
-        await axios.get(`https://localhost:7271/api/Books/${bid}`,
+        await axios.get(`https://granthalaya.bsite.net/api/Books/${bid}`,
         {
             headers: { "authorization": "Bearer " + localStorage.getItem('token') }
           }).then(response => {
@@ -145,7 +145,7 @@ export default function BookList(props) {
             'bookImage': bookBorrow.imageName,
             'libraryName': bookBorrow.libraryName
         }
-        axios.post('https://localhost:7271/api/BorrowedBooks', borrowedBook, {
+        axios.post('https://granthalaya.bsite.net/api/BorrowedBooks', borrowedBook, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": "Bearer " + localStorage.getItem('token')
@@ -187,7 +187,7 @@ export default function BookList(props) {
             navigate('/login');
         }
         else {
-            axios.delete(`https://localhost:7271/api/Books/${bid}`,{
+            axios.delete(`https://granthalaya.bsite.net/api/Books/${bid}`,{
                 headers: { authorization: "Bearer " + localStorage.getItem('token') }
               }).then(res => {
                 console.log(res.data);

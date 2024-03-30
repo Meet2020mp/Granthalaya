@@ -12,7 +12,7 @@ function Home(){
 
   const fetchLibraries = () => {
     try {
-      axios.get('https://localhost:7271/api/Customers/GetDemographics').then((response) => {
+      axios.get('https://granthalaya.bsite.net/api/Customers/GetDemographics').then((response) => {
         console.log(response.data)
         setDemographics(response.data);
         setLoading(false);

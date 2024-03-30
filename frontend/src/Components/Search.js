@@ -100,8 +100,9 @@ const getMuiTheme = () => createTheme({
 })
 const storeData=async (bid)=>{
   var bookBorrow;
-   await axios.get(`https://localhost:7271/api/Books/${bid}`,{
-    headers: { "authorization": "Bearer " + localStorage.getItem('token') },
+   await axios.get(`https://granthalaya.bsite.net/api/Books/${bid}`,{
+    headers: { "authorization": "Bearer " + localStorage.getItem('token'),
+    "Access-Control-Allow-Origin": "*" },
   }).then(response=>{
           // setBookBorrow(response.data);
           bookBorrow=response.data;
@@ -123,10 +124,11 @@ const storeData=async (bid)=>{
           'bookImage':bookBorrow.imageName,
           'libraryName':bookBorrow.libraryName
       }
-      axios.post('https://localhost:7271/api/BorrowedBooks', borrowedBook, {
+      axios.post('https://granthalaya.bsite.net/api/BorrowedBooks', borrowedBook, {
           headers: {
               "Content-Type": "application/json",
-              "authorization": "Bearer " + localStorage.getItem('token')
+              "authorization": "Bearer " + localStorage.getItem('token'),
+              "Access-Control-Allow-Origin": "*"
           }
       }).then(response => {
           console.log(response.data);
@@ -139,8 +141,10 @@ const storeData=async (bid)=>{
   const handleSubmit=async ()=>{
     setLoading(true);
     
-    await axios.get(`https://localhost:7271/api/Books/byQuery/${parameter}/${query}/${libraryName}`,{
-        headers: { "authorization": "Bearer " + localStorage.getItem('token') }
+    await axios.get(`https://granthalaya.bsite.net/api/Books/byQuery/${parameter}/${query}/${libraryName}`,{
+        headers: { "authorization": "Bearer " + localStorage.getItem('token'),
+        "Access-Control-Allow-Origin": "*"
+    }
       }).then((res)=>{
       console.log(res.data);
       setBooks(res.data);

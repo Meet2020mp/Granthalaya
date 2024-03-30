@@ -81,7 +81,7 @@ export default function BorrowedBooks() {
     ]);
     const [returnedBooks, setReturnedBooks] = useState();
     let fetchBooks = async () => {
-        await axios.get(`https://localhost:7271/api/BorrowedBooks/ByCustomerName/${localStorage.getItem('userName')}`,{
+        await axios.get(`https://granthalaya.bsite.net/api/BorrowedBooks/ByCustomerName/${localStorage.getItem('userName')}`,{
             headers: { "authorization": "Bearer " + localStorage.getItem('token') }
           }).then((response) => {
             
@@ -110,7 +110,7 @@ export default function BorrowedBooks() {
     }, [isReturned])
     const returnBook = async (bid) => {
         // setLoading(true);
-        await axios.get(`https://localhost:7271/api/BorrowedBooks/${bid}`,
+        await axios.get(`https://granthalaya.bsite.net/api/BorrowedBooks/${bid}`,
         {
             headers: { "authorization": "Bearer " + localStorage.getItem('token') }
           }).then(response => {
@@ -129,7 +129,7 @@ export default function BorrowedBooks() {
         })
 
         console.log(returnedBooks);
-        await axios.put(`https://localhost:7271/api/BorrowedBooks/${bid}`,
+        await axios.put(`https://granthalaya.bsite.net/api/BorrowedBooks/${bid}`,
             {
                 'id': bid,
                 'libraryName': returnedBooks.libraryName,
@@ -157,7 +157,7 @@ export default function BorrowedBooks() {
         // console.log(bid);
     }
     // async function getValue(bid,lid) {
-    //     axios.get(`https://localhost:7271/api/Books/${bid}`).then(response => {
+    //     axios.get(`https://granthalaya.bsite.net/api/Books/${bid}`).then(response => {
     //         //   console.log(response.data);  
     //         setBookName(response.data.title);
     //         setBookSrc(response.data.imageName);
@@ -166,7 +166,7 @@ export default function BorrowedBooks() {
     //         console.log(err);
     //     })
 
-    //     axios.get(`https://localhost:7271/api/Libraries/${lid}`).then(response => {
+    //     axios.get(`https://granthalaya.bsite.net/api/Libraries/${lid}`).then(response => {
     //         // console.log(response.data);  
     //         setlibraryId(response.data.name);
     //     }).catch(err => {

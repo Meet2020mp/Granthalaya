@@ -81,7 +81,7 @@ export default function BorrowedBooksFromLibrary() {
     ]);
     const [returnedBooks, setReturnedBooks] = useState();
     let fetchBooks = async () => {
-        await axios.get(`https://localhost:7271/api/BorrowedBooks/ByLibraryName/${localStorage.getItem('libraryName')}`,{
+        await axios.get(`https://granthalaya.bsite.net/api/BorrowedBooks/ByLibraryName/${localStorage.getItem('libraryName')}`,{
             headers: { "authorization": "Bearer " + localStorage.getItem('token') }
           }).then((response) => {
             console.log(response.data);
@@ -110,7 +110,7 @@ export default function BorrowedBooksFromLibrary() {
     }, [isReturned])
     const returnBook = async (bid) => {
         // setLoading(true);
-        await axios.get(`https://localhost:7271/api/BorrowedBooks/${bid}`,{
+        await axios.get(`https://granthalaya.bsite.net/api/BorrowedBooks/${bid}`,{
             headers: { "authorization": "Bearer " + localStorage.getItem('token') }
           }).then(response => {
             // console.log(response.data);
@@ -128,7 +128,7 @@ export default function BorrowedBooksFromLibrary() {
         })
 
         console.log(returnedBooks);
-        await axios.put(`https://localhost:7271/api/BorrowedBooks/${bid}`,
+        await axios.put(`https://granthalaya.bsite.net/api/BorrowedBooks/${bid}`,
             {
                 'id': bid,
                 'libraryName': returnedBooks.libraryName,

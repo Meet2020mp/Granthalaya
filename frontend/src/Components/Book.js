@@ -59,13 +59,13 @@ export default function Book(props) {
         setPage(value);
     };
     const fetchData = async () => {
-        await axios.get(`https://localhost:7271/api/Books/${bookId}`,{
+        await axios.get(`https://granthalaya.bsite.net/api/Books/${bookId}`,{
             headers:{"authorization": "Bearer " + localStorage.getItem('token')}
         }).then(response => {
             console.log(response.data);
             setBook(response.data);
         }).catch(err => { console.log(err) })
-        await axios.get(`https://localhost:7271/api/Review/ByBook/${bookId}`,{
+        await axios.get(`https://granthalaya.bsite.net/api/Review/ByBook/${bookId}`,{
             headers:{"authorization": "Bearer " + localStorage.getItem('token')}
         }).then(response => {
             setReviews(response.data);
@@ -85,7 +85,7 @@ export default function Book(props) {
         console.log(ratingValue);
         console.log(feedBackRef.current.value);
         var time = new Date();
-        await axios.post(`https://localhost:7271/api/Review`, {
+        await axios.post(`https://granthalaya.bsite.net/api/Review`, {
             "rating": ratingValue,
             "bookId": bookId,
             "feedBack": feedBackRef.current.value,
@@ -105,7 +105,7 @@ export default function Book(props) {
     const storeData = async (bid) => {
         setIsBorrowed(false);
         var bookBorrow;
-        await axios.get(`https://localhost:7271/api/Books/${bid}`,{
+        await axios.get(`https://granthalaya.bsite.net/api/Books/${bid}`,{
             headers:{"authorization": "Bearer " + localStorage.getItem('token')}
         }).then(response => {
             // setBookBorrow(response.data);
@@ -128,7 +128,7 @@ export default function Book(props) {
             'bookImage': bookBorrow.imageName,
             'libraryName': bookBorrow.libraryName
         }
-        axios.post('https://localhost:7271/api/BorrowedBooks', borrowedBook, {
+        axios.post('https://granthalaya.bsite.net/api/BorrowedBooks', borrowedBook, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": "Bearer " + localStorage.getItem('token')
@@ -169,7 +169,7 @@ export default function Book(props) {
             navigate('/login');
         }
         else {
-            axios.delete(`https://localhost:7271/api/Books/${bookId}`,{
+            axios.delete(`https://granthalaya.bsite.net/api/Books/${bookId}`,{
                 headers: { "authorization": "Bearer " + localStorage.getItem('token') },
               }).then(res => {
                 // console.log(res.data);

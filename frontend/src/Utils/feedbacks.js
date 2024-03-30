@@ -16,60 +16,25 @@ export default function Feedback(props){
       return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
     const handleClose = (event, reason) => {
-      // setOpen(true);
-        // if (reason === 'clickaway') {
-        //   return;
-        // }
+        if (reason === 'clickaway') {
+          return;
+        }
         setOpen(false);
       };
-  const handleClick = (message) => () => {
-    setSnackPack((prev) => [...prev, { message, key: new Date().getTime() }]);
-  };
-  const handleExited = () => {
-    setMessageInfo(undefined);
-  };
   useEffect(()=>{
     console.log(props.mes);
-    // setMessageInfo(props.mes)
-    
-    // setOpen(false)
-    
-    // setFeedbackType(props.type)
-  })
+    setMessageInfo(props.mes)
+    setOpen(props.open)
+    setFeedbackType(props.type)
+  },[])
   return(
-  // <Snackbar
-  //       key={messageInfo ? messageInfo.key : undefined}
-  //       open={open}
-  //       autoHideDuration={6000}
-  //       onClose={handleClose}
-  //       TransitionProps={{ onExited: handleExited }}
-  //       message={messageInfo ? messageInfo.message : undefined}
-  //       action={
-  //         <React.Fragment>
-  //           <Button color="secondary" size="small" onClick={handleClose}>
-  //             UNDO
-  //           </Button>
-  //           <IconButton
-  //             aria-label="close"
-  //             color="inherit"
-  //             sx={{ p: 0.5 }}
-  //             onClick={handleClose}
-  //           >
-  //             <CloseIcon />
-  //           </IconButton>
-  //         </React.Fragment>
-  //       }
-  //     />
   <Stack spacing={2} sx={{ width: '100%' }}>
-      {/* <Button variant="outlined" onClick={handleClick}>
-        Open success snackbar
-      </Button> */}
       <Snackbar open={open} anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
-        }} autoHideDuration={10000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={props.type} sx={{ width: '100%' }}>
-          {props.mes}
+        }} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={feedbackType} sx={{ width: '100%' }}>
+          {messageInfo}
         </Alert>
       </Snackbar>
     </Stack>

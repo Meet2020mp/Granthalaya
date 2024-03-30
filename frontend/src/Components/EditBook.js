@@ -25,7 +25,7 @@ function EditBookForm() {
   const [isEdit,setIsEdit]=useState(false);
 
     const  fetchData=async()=>{
-    await axios.get(`https://localhost:7271/api/Books/${bookId}`,{
+    await axios.get(`https://granthalaya.bsite.net/api/Books/${bookId}`,{
       headers: { "authorization": "Bearer " + localStorage.getItem('token') }
     }).then(response=>{
       setBook(response.data);
@@ -62,7 +62,7 @@ function EditBookForm() {
     // formData.append('image',book.image)
     else {console.log(book);formData.append('imageName',book.imageName);formData.append('image',null)}
     formData.append('Id',bookId)
-    axios.put(`https://localhost:7271/api/Books/${bookId}`,formData,{
+    axios.put(`https://granthalaya.bsite.net/api/Books/${bookId}`,formData,{
       headers:{
         "Content-Type":"multipart/form-data",
         "authorization": "Bearer " + localStorage.getItem('token')
